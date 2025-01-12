@@ -32,4 +32,33 @@ def test_category(category_a: Category, product_a: Product) -> None:
         "description": "category C",
         "products": [product_a]
     }
+    Category.category_count -= 1
+    Category.product_count -= 1
     assert dict_c == category_dict
+
+
+def test_category_count() -> None:
+    """testing whether categories and products are counted correctly"""
+
+    products_a = [Product(name="A1",
+                          description="product A",
+                          price=10.0,
+                          quantity=10),
+                  Product(name="A2",
+                          description="product A",
+                          price=10.0,
+                          quantity=10)]
+    products_b = [Product(name="B1",
+                          description="product B",
+                          price=10.0,
+                          quantity=5),
+                  Product(name="B2",
+                          description="product B",
+                          price=10.0,
+                          quantity=20)]
+    categories = [
+        Category(name="A", description="category A", products=products_a),
+        Category(name="B", description="category B", products=products_b),
+    ]
+    assert len(categories) == 2
+    assert Category.category_count == 2 and Category.product_count == 4
