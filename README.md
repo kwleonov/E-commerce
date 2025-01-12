@@ -10,3 +10,5 @@
   - *name* - the name of the category
   - *description* - the description of the category
   - *products* - the list of the products
+  - *category_count* - the class attribute is count of categories
+  - *product_count* - the class attribute is count of products
