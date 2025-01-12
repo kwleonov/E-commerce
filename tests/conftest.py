@@ -14,7 +14,7 @@ def product_a() -> Product:
 
 
 @pytest.fixture()
-def category_a(product_a: Product) -> None:
+def category_a(product_a: Product) -> Category:
     """the fixture for the test_category"""
     category = Category(name="C",
                         description="category C",
