@@ -1,5 +1,21 @@
 import json
 import pathlib
+from typing import TypedDict
+
+
+Product_json = TypedDict("Product_json", {
+    "name": str,
+    "description": str,
+    "price": float,
+    "quantity": int,
+})
+
+
+Category_json = TypedDict("Category_json", {
+    "name": str,
+    "description": str,
+    "products": list[Product_json],
+})
 
 
 class Product:
@@ -61,11 +77,26 @@ def read_json(filename: str) -> list[Category]:
     list of Category"""
 
     categories: list[Category] = []
+    categories_json: list[Category_json] = []
     if not pathlib.Path(filename).exists():
         return []
     try:
         with open(filename, encoding="utf-8") as f:
-            categories = json.load(f)
+            categories_json = json.load(f)
     except json.JSONDecodeError:
         return []
+    for category in categories_json:
+        products: list[Product] = []
+        for product in category["products"]:
+            products.append(Product(
+                name=product["name"],
+                description=product["description"],
+                price=product["price"],
+                quantity=product["quantity"]
+            ))
+        categories.append(Category(
+            name=category["name"],
+            description=category["description"],
+            products=products
+        ))
     return categories
