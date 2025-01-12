@@ -2,7 +2,6 @@ import json
 import pathlib
 from typing import TypedDict
 
-
 Product_json = TypedDict("Product_json", {
     "name": str,
     "description": str,
