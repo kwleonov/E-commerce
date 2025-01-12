@@ -1,3 +1,7 @@
+import json
+import pathlib
+
+
 class Product:
     """class Product
         attributes:
@@ -50,3 +54,18 @@ class Category:
         self.products = products
         Category.category_count += 1
         Category.product_count += len(products)
+
+
+def read_json(filename: str) -> list[Category]:
+    """receives data from an Json file and returns
+    list of Category"""
+
+    categories: list[Category] = []
+    if not pathlib.Path(filename).exists():
+        return []
+    try:
+        with open(filename, encoding="utf-8") as f:
+            categories = json.load(f)
+    except json.JSONDecodeError:
+        return []
+    return categories
