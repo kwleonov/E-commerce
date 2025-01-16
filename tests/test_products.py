@@ -1,3 +1,5 @@
+from pytest import CaptureFixture
+from typing import Any
 from unittest.mock import patch
 
 from src.products import Category, Product, read_json
@@ -19,6 +21,18 @@ def test_product(product_a: Product) -> None:
         "quantity": product_a.quantity,
     }
     assert dict_a == product_dict
+
+
+def test_price_setter(product_a: Product,
+                      capsys: CaptureFixture[Any]) -> None:
+    """testing the price setter"""
+    product_a.price = 20.0
+    assert product_a.price == 20.0
+    product_a.price = -110.0
+    assert product_a.price == 20.0
+    captured = capsys.readouterr()
+    result = NEGATIVE_ZERO_PRICE
+    assert captured.out.strip() == result
 
 
 def test_category(category_a: Category, product_a: Product) -> None:
