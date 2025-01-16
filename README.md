@@ -8,7 +8,7 @@
     - *price* - the cost of the product for sale
     - *quantity* - the quantity of the product in stock
   - methods:
-    - *new_product* - create a new product fro dictionary
+    - *new_product* - create a new product from dictionary
 - *Category* - class Category
   - attributes:
     - *name* - the name of the category
