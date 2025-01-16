@@ -39,7 +39,7 @@ def test_price_setter(product_a: Product,
 def test_category(category_a: Category, product_a: Product) -> None:
     """testing init Category"""
 
-    dict_c = {
+    dict_a = {
         "name": category_a.name,
         "description": category_a.description,
         "products": category_a.products,
@@ -50,7 +50,7 @@ def test_category(category_a: Category, product_a: Product) -> None:
         "description": category_b.description,
         "products": category_b.products,
     }
-    assert dict_c == dict_b
+    assert dict_a == dict_b
 
 
 def test_category_count(categories: list[Category]) -> None:
@@ -80,6 +80,29 @@ def test_json_not_exist_read() -> None:
     """testing for open a not exist json file"""
     categories = read_json("data/notexist.json")
     assert len(categories) == 0
+
+
+def test_add_product(product_a: Product, category_a: Category) -> None:
+    """testing add the exist product"""
+    product_count = Category.product_count
+    quantity = product_a.quantity
+    price = product_a.price
+    new_product = Product.new_product({
+        "name": product_a.name,
+        "description": product_a.description,
+        "price": product_a.price / 2,
+        "quantity": 10
+    })
+    category_a.add_product(new_product)
+    assert Category.product_count == product_count
+    assert product_a.quantity == quantity + new_product.quantity
+    assert product_a.price == price
+    new_product.price = product_a.price * 2
+    quantity = product_a.quantity
+    category_a.add_product(new_product)
+    assert Category.product_count == product_count
+    assert product_a.quantity == quantity + new_product.quantity
+    assert product_a.price == new_product.price
 
 
 def test_read_json() -> None:

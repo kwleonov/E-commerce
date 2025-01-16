@@ -1,7 +1,7 @@
 import json
 import pathlib
 import sys
-from typing import TypedDict
+from typing import ClassVar, TypedDict
 
 if sys.version_info < (3, 11):
     from typing_extensions import Self
@@ -84,8 +84,9 @@ class Category:
     name: str = ""
     description: str = ""
     __products: list[Product] = []
-    category_count: int = 0
-    product_count: int = 0
+    __product_names: dict[str, int] = dict()
+    category_count: ClassVar[int] = 0
+    product_count: ClassVar[int] = 0
 
     def __init__(self,
                  name: str,
@@ -97,6 +98,7 @@ class Category:
         self.name = name
         self.description = description
         self.__products = products
+        self.__product_names = {v.name: i for i, v in enumerate(products)}
         Category.category_count += 1
         Category.product_count += len(products)
 
@@ -112,6 +114,12 @@ class Category:
 
     def add_product(self, product: Product) -> None:
         """add the product to the __products list of the Category's instance"""
+        if product.name in self.__product_names:
+            index = self.__product_names[product.name]
+            self.__products[index].quantity += product.quantity
+            if product.price > self.__products[index].price:
+                self.__products[index].price = product.price
+            return
         self.__products.append(product)
         Category.product_count += 1
 
