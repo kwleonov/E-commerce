@@ -2,7 +2,7 @@ from pytest import CaptureFixture
 from typing import Any
 from unittest.mock import patch
 
-from src.products import Category, Product, read_json
+from src.products import NEGATIVE_ZERO_PRICE, Category, Product, read_json
 
 
 def test_product(product_a: Product) -> None:

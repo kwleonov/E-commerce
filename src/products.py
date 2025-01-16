@@ -2,6 +2,9 @@ import json
 import pathlib
 from typing import TypedDict
 
+
+NEGATIVE_ZERO_PRICE = "Цена не должна быть нулевой или отрицательная"
+
 Product_json = TypedDict("Product_json", {
     "name": str,
     "description": str,
@@ -27,7 +30,7 @@ class Product:
 
     name: str = ""
     description: str = ""
-    price: float = 0.0
+    __price: float = 0.0
     quantity: int = 0
 
     def __init__(self,
@@ -39,9 +42,22 @@ class Product:
         Init the name, description, price and quantity attributes"""
 
         self.name = name
-        self.price = price
+        self.__price = price
         self.quantity = quantity
         self.description = description
+
+    @property
+    def price(self) -> float:
+        """returns the value of the __price attribute"""
+        return self.__price
+
+    @price.setter
+    def price(self, price: float) -> None:
+        """set the value of the __price attribute"""
+        if price <= 0:
+            print(NEGATIVE_ZERO_PRICE)
+            return
+        self.__price = price
 
 
 class Category:
