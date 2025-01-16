@@ -1,7 +1,12 @@
 import json
 import pathlib
+import sys
 from typing import TypedDict
 
+if sys.version_info < (3, 11):
+    from typing_extensions import Self
+else:
+    from typing import Self
 
 NEGATIVE_ZERO_PRICE = "Цена не должна быть нулевой или отрицательная"
 
@@ -59,6 +64,15 @@ class Product:
             return
         self.__price = price
 
+    @classmethod
+    def new_product(cls, product_dict: Product_json) -> Self:
+        """create the new product from dictionary"""
+
+        return cls(product_dict["name"],
+                   product_dict["description"],
+                   product_dict["price"],
+                   product_dict["quantity"])
+
 
 class Category:
     """class Category
@@ -69,7 +83,7 @@ class Category:
 
     name: str = ""
     description: str = ""
-    products: list[Product] = []
+    __products: list[Product] = []
     category_count: int = 0
     product_count: int = 0
 
@@ -82,9 +96,24 @@ class Category:
 
         self.name = name
         self.description = description
-        self.products = products
+        self.__products = products
         Category.category_count += 1
         Category.product_count += len(products)
+
+    @property
+    def products(self) -> str:
+        """returns str by format:
+        f'{name}, {price} руб. Остаток: {quantity} шт.\n'"""
+        products_str = "".join(
+            [f"{p.name}, {p.price} руб. Остаток: {p.quantity} шт.\n"
+             for p in self.__products]
+        )
+        return products_str
+
+    def add_product(self, product: Product) -> None:
+        """add the product to the __products list of the Category's instance"""
+        self.__products.append(product)
+        Category.product_count += 1
 
 
 def read_json(filename: str) -> list[Category]:

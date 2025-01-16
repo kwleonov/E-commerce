@@ -1,6 +1,7 @@
-from pytest import CaptureFixture
 from typing import Any
 from unittest.mock import patch
+
+from pytest import CaptureFixture
 
 from src.products import NEGATIVE_ZERO_PRICE, Category, Product, read_json
 
@@ -43,17 +44,36 @@ def test_category(category_a: Category, product_a: Product) -> None:
         "description": category_a.description,
         "products": category_a.products,
     }
-    category_dict = {"name": "C", "description": "category C",
-                     "products": [product_a]}
-    Category.category_count -= 1
-    Category.product_count -= 1
-    assert dict_c == category_dict
+    category_b = Category("C", "category C", [product_a])
+    dict_b = {
+        "name": category_b.name,
+        "description": category_b.description,
+        "products": category_b.products,
+    }
+    assert dict_c == dict_b
 
 
 def test_category_count(categories: list[Category]) -> None:
     """testing whether categories and products are counted correctly"""
 
-    assert Category.category_count == 2 and Category.product_count == 4
+    category_count = Category.category_count
+    product_count = Category.product_count
+    new_category = Category(
+        "New", "new category", [Product("New", "new product", 1.0, 1)]
+    )
+    category_count += 1
+    product_count += 1
+    assert Category.category_count == category_count
+    assert Category.product_count == product_count
+    new_category.add_product(
+        Product.new_product({
+            "name": "Another",
+            "description": "another product",
+            "price": 2.0,
+            "quantity": 2}))
+    product_count += 1
+    assert Category.category_count == category_count
+    assert Category.product_count == product_count
 
 
 def test_json_not_exist_read() -> None:
@@ -96,14 +116,7 @@ def test_read_json() -> None:
             c2 = categories_json[i]
             assert c1.name == c2.name
             assert c1.description == c2.description
-            assert len(c1.products) == len(c2.products)
-            for j in range(len(c1.products)):
-                p1 = c1.products[j]
-                p2 = c2.products[j]
-                assert p1.name == p2.name
-                assert p1.description == p2.description
-                assert p1.price == p2.price
-                assert p1.quantity == p2.quantity
+            assert c1.products == c2.products
 
 
 def test_read_json_error() -> None:
