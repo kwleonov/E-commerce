@@ -119,7 +119,7 @@ class Category:
             self.__products[index].quantity += product.quantity
             if product.price > self.__products[index].price:
                 self.__products[index].price = product.price
-                return
+            return
         index = len(self.__products)
         self.__product_names[product.name] = index
         self.__products.append(product)
