@@ -129,7 +129,8 @@ def test_add_product(product_a: Product, category_a: Category) -> None:
 def test_category_str(category_a: Category, product_a: Product) -> None:
     """testing for converting the Category's instance to str"""
 
-    result = f"{category_a.name}, количество продуктов: {product_a.quantity} шт"
+    result = f"{category_a.name}"
+    result += f", количество продуктов: {product_a.quantity} шт"
     assert str(category_a) == result
 
 
