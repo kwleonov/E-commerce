@@ -33,8 +33,7 @@ def test_price_setter(product_a: Product,
     product_a.price = -110.0
     assert product_a.price == price
     captured = capsys.readouterr()
-    result = NEGATIVE_ZERO_PRICE
-    assert captured.out.strip() == result
+    assert captured.out.strip() == NEGATIVE_ZERO_PRICE
     price -= 10
     with patch("builtins.input") as mock_input:
         mock_input.return_value = "n"
@@ -97,12 +96,6 @@ def test_category_count(categories: list[Category]) -> None:
     assert Category.product_count == product_count
 
 
-def test_json_not_exist_read() -> None:
-    """testing for open a not exist json file"""
-    categories = read_json("data/notexist.json")
-    assert len(categories) == 0
-
-
 def test_add_product(product_a: Product, category_a: Category) -> None:
     """testing add the exist product"""
     product_count = Category.product_count
@@ -124,6 +117,12 @@ def test_add_product(product_a: Product, category_a: Category) -> None:
     assert Category.product_count == product_count
     assert product_a.quantity == quantity + new_product.quantity
     assert product_a.price == new_product.price
+
+
+def test_json_not_exist_read() -> None:
+    """testing for open a not exist json file"""
+    categories = read_json("data/notexist.json")
+    assert len(categories) == 0
 
 
 def test_read_json() -> None:
