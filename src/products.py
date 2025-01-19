@@ -95,6 +95,13 @@ class Product:
 
         return f"{self.name}, {self.__price} руб, Остаток: {self.quantity} шт"
 
+    def __add__(self, product: Self) -> float:
+        """override the __add__ method to return
+        the sum of multiplying the price by the quantity of each product"""
+        result = self.__price * self.quantity
+        result += product.price * product.quantity
+        return result
+
 
 class Category:
     """class Category

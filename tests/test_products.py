@@ -63,6 +63,13 @@ def test_product_str(product_a: Product) -> None:
     assert str(product_a) == result
 
 
+def test_product_add(product_a: Product, product_b: Product) -> None:
+    """testing for adding product_b to product_a"""
+    result = product_a.price * product_a.quantity
+    result += product_b.price * product_b.quantity
+    assert product_a + product_b == result
+
+
 def test_category(category_a: Category, product_a: Product) -> None:
     """testing init Category"""
 
