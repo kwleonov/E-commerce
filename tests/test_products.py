@@ -56,6 +56,13 @@ def test_price_setter(product_a: Product,
         assert product_a.price == price
 
 
+def test_product_str(product_a: Product) -> None:
+    """testing for converting the Product's instance to str"""
+    p = product_a
+    result = f"{p.name}, {p.price} руб, Остаток: {p.quantity} шт"
+    assert str(product_a) == result
+
+
 def test_category(category_a: Category, product_a: Product) -> None:
     """testing init Category"""
 

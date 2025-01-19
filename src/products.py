@@ -89,6 +89,12 @@ class Product:
                    product_dict["price"],
                    product_dict["quantity"])
 
+    def __str__(self) -> str:
+        """override __str__ method for return str by format:
+        'Название продукта, X руб. Остаток: X шт'"""
+
+        return f"{self.name}, {self.__price} руб, Остаток: {self.quantity} шт"
+
 
 class Category:
     """class Category
