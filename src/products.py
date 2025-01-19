@@ -1,6 +1,14 @@
 import json
 import pathlib
-from typing import TypedDict
+import sys
+from typing import ClassVar, TypedDict
+
+if sys.version_info < (3, 11):
+    from typing_extensions import Self
+else:
+    from typing import Self
+
+NEGATIVE_ZERO_PRICE = "Цена не должна быть нулевая или отрицательная"
 
 Product_json = TypedDict("Product_json", {
     "name": str,
@@ -27,7 +35,7 @@ class Product:
 
     name: str = ""
     description: str = ""
-    price: float = 0.0
+    __price: float = 0.0
     quantity: int = 0
 
     def __init__(self,
@@ -39,9 +47,47 @@ class Product:
         Init the name, description, price and quantity attributes"""
 
         self.name = name
-        self.price = price
+        self.__price = price
         self.quantity = quantity
         self.description = description
+
+    @property
+    def price(self) -> float:
+        """returns the value of the __price attribute"""
+        return self.__price
+
+    @price.setter
+    def price(self, price: float) -> None:
+        """set the value of the __price attribute"""
+        if price <= 0:
+            print(NEGATIVE_ZERO_PRICE)
+            return
+        if price > self.__price:
+            self.__price = price
+            return
+        if price < self.__price:
+            print(f"Новая цена ({price}) ниже чем старая ({self.__price})")
+            while True:
+                user_answer = input("Нужно ли понизить цену? (y/n):")
+                user_answer = user_answer.lower()
+                print()
+                if user_answer == "y":
+                    self.__price = price
+                    return
+                if user_answer == "n":
+                    return
+                print("""Выберите нужный вариант нажав кнопу:
+                                'y' - да, цену понижаем
+                                'n' - нет, оставляем старую.""")
+
+    @classmethod
+    def new_product(cls, product_dict: Product_json) -> Self:
+        """create the new product from dictionary"""
+
+        return cls(product_dict["name"],
+                   product_dict["description"],
+                   product_dict["price"],
+                   product_dict["quantity"])
 
 
 class Category:
@@ -53,9 +99,10 @@ class Category:
 
     name: str = ""
     description: str = ""
-    products: list[Product] = []
-    category_count: int = 0
-    product_count: int = 0
+    __products: list[Product] = []
+    __product_names: dict[str, int] = dict()
+    category_count: ClassVar[int] = 0
+    product_count: ClassVar[int] = 0
 
     def __init__(self,
                  name: str,
@@ -66,9 +113,33 @@ class Category:
 
         self.name = name
         self.description = description
-        self.products = products
+        self.__products = products
+        self.__product_names = {v.name: i for i, v in enumerate(products)}
         Category.category_count += 1
         Category.product_count += len(products)
+
+    @property
+    def products(self) -> str:
+        """returns str by format:
+        f'{name}, {price} руб. Остаток: {quantity} шт.\n'"""
+        products_str = "".join(
+            [f"{p.name}, {p.price} руб. Остаток: {p.quantity} шт.\n"
+             for p in self.__products]
+        )
+        return products_str
+
+    def add_product(self, product: Product) -> None:
+        """add the product to the __products list of the Category's instance"""
+        if product.name in self.__product_names:
+            index = self.__product_names[product.name]
+            self.__products[index].quantity += product.quantity
+            if product.price > self.__products[index].price:
+                self.__products[index].price = product.price
+            return
+        index = len(self.__products)
+        self.__product_names[product.name] = index
+        self.__products.append(product)
+        Category.product_count += 1
 
 
 def read_json(filename: str) -> list[Category]:
