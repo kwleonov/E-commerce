@@ -126,6 +126,13 @@ def test_add_product(product_a: Product, category_a: Category) -> None:
     assert product_a.price == new_product.price
 
 
+def test_category_str(category_a: Category, product_a: Product) -> None:
+    """testing for converting the Category's instance to str"""
+
+    result = f"{category_a.name}, количество продуктов: {product_a.quantity} шт"
+    assert str(category_a) == result
+
+
 def test_json_not_exist_read() -> None:
     """testing for open a not exist json file"""
     categories = read_json("data/notexist.json")

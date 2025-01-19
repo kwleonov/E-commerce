@@ -147,6 +147,15 @@ class Category:
         self.__products.append(product)
         Category.product_count += 1
 
+    def __str__(self) -> str:
+        """override the __str__ method for return str by format:
+        'Название категории, количество продуктов: X шт',
+        где количество продуктов - общее количество товаров
+        на складе (quantity) всех продуктов данной категории"""
+
+        quantity = sum([p.quantity for p in self.__products])
+        return f"{self.name}, количество продуктов: {quantity} шт"
+
 
 def read_json(filename: str) -> list[Category]:
     """receives data from an Json file and returns
