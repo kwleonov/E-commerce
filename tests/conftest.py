@@ -1,6 +1,6 @@
 import pytest
 
-from src.products import Category, Product
+from src.products import Category, Product, Product_json
 
 
 @pytest.fixture
@@ -11,6 +11,18 @@ def product_a() -> Product:
                       price=10.0,
                       quantity=10)
     return product
+
+
+@pytest.fixture
+def product_b() -> Product:
+    """the fixture for the test_product_add"""
+    product: Product_json = {
+        "name": "B",
+        "description": "product B",
+        "price": 20.0,
+        "quantity": 3
+    }
+    return Product.new_product(product)
 
 
 @pytest.fixture()
