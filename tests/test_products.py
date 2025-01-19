@@ -3,7 +3,8 @@ from unittest.mock import patch
 
 from pytest import CaptureFixture
 
-from src.products import NEGATIVE_ZERO_PRICE, Category, Product, read_json
+from src.products import (NEGATIVE_ZERO_PRICE, Category, CategoryIter, Product,
+                          read_json)
 
 
 def test_product(product_a: Product) -> None:
@@ -203,3 +204,11 @@ def test_read_json_error() -> None:
         mock_json.read.return_value = json_data
         categories_json = read_json("data/products.json")
         assert len(categories_json) == 0
+
+
+def test_category_iter(category_a: Category, product_a: Product) -> None:
+    """testing the CategoryIter class"""
+
+    category_iter = CategoryIter(category_a)
+    for product in category_iter.get_product():
+        assert product == product_a
