@@ -1,6 +1,7 @@
 import json
 import pathlib
 import sys
+from collections.abc import Generator
 from typing import ClassVar, TypedDict
 
 if sys.version_info < (3, 11):
@@ -89,6 +90,19 @@ class Product:
                    product_dict["price"],
                    product_dict["quantity"])
 
+    def __str__(self) -> str:
+        """override __str__ method for return str by format:
+        'Название продукта, X руб. Остаток: X шт'"""
+
+        return f"{self.name}, {self.__price} руб, Остаток: {self.quantity} шт"
+
+    def __add__(self, product: Self) -> float:
+        """override the __add__ method to return
+        the sum of multiplying the price by the quantity of each product"""
+        result = self.__price * self.quantity
+        result += product.price * product.quantity
+        return result
+
 
 class Category:
     """class Category
@@ -141,6 +155,28 @@ class Category:
         self.__products.append(product)
         Category.product_count += 1
 
+    def __str__(self) -> str:
+        """override the __str__ method for return str by format:
+        'Название категории, количество продуктов: X шт',
+        где количество продуктов - общее количество товаров
+        на складе (quantity) всех продуктов данной категории"""
+
+        quantity = sum([p.quantity for p in self.__products])
+        return f"{self.name}, количество продуктов: {quantity} шт"
+
+    def __iter__(self) -> Self:
+        """iterator for the __products"""
+        self.__current_index = 0
+        return self
+
+    def __next__(self) -> Product:
+        """get next item of the __products"""
+        if self.__current_index >= len(self.__products):
+            raise StopIteration
+        product = self.__products[self.__current_index]
+        self.__current_index += 1
+        return product
+
 
 def read_json(filename: str) -> list[Category]:
     """receives data from an Json file and returns
@@ -170,3 +206,14 @@ def read_json(filename: str) -> list[Category]:
             products=products
         ))
     return categories
+
+
+class CategoryIter:
+    """iterator for products of category"""
+    def __init__(self, category: Category) -> None:
+        self.__category = category
+
+    def get_product(self) -> Generator[Product]:
+        """generator for the products of the category"""
+        for product in self.__category:
+            yield product

@@ -3,7 +3,8 @@ from unittest.mock import patch
 
 from pytest import CaptureFixture
 
-from src.products import NEGATIVE_ZERO_PRICE, Category, Product, read_json
+from src.products import (NEGATIVE_ZERO_PRICE, Category, CategoryIter, Product,
+                          read_json)
 
 
 def test_product(product_a: Product) -> None:
@@ -54,6 +55,20 @@ def test_price_setter(product_a: Product,
         captured = capsys.readouterr()
         assert captured.out.strip()[-22:] == "нет, оставляем старую."
         assert product_a.price == price
+
+
+def test_product_str(product_a: Product) -> None:
+    """testing for converting the Product's instance to str"""
+    p = product_a
+    result = f"{p.name}, {p.price} руб, Остаток: {p.quantity} шт"
+    assert str(product_a) == result
+
+
+def test_product_add(product_a: Product, product_b: Product) -> None:
+    """testing for adding product_b to product_a"""
+    result = product_a.price * product_a.quantity
+    result += product_b.price * product_b.quantity
+    assert product_a + product_b == result
 
 
 def test_category(category_a: Category, product_a: Product) -> None:
@@ -119,6 +134,14 @@ def test_add_product(product_a: Product, category_a: Category) -> None:
     assert product_a.price == new_product.price
 
 
+def test_category_str(category_a: Category, product_a: Product) -> None:
+    """testing for converting the Category's instance to str"""
+
+    result = f"{category_a.name}"
+    result += f", количество продуктов: {product_a.quantity} шт"
+    assert str(category_a) == result
+
+
 def test_json_not_exist_read() -> None:
     """testing for open a not exist json file"""
     categories = read_json("data/notexist.json")
@@ -181,3 +204,11 @@ def test_read_json_error() -> None:
         mock_json.read.return_value = json_data
         categories_json = read_json("data/products.json")
         assert len(categories_json) == 0
+
+
+def test_category_iter(category_a: Category, product_a: Product) -> None:
+    """testing the CategoryIter class"""
+
+    category_iter = CategoryIter(category_a)
+    for product in category_iter.get_product():
+        assert product == product_a
