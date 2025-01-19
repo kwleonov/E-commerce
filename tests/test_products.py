@@ -27,13 +27,34 @@ def test_product(product_a: Product) -> None:
 def test_price_setter(product_a: Product,
                       capsys: CaptureFixture[Any]) -> None:
     """testing the price setter"""
-    product_a.price = 20.0
-    assert product_a.price == 20.0
+    price = product_a.price + 10
+    product_a.price = price
+    assert product_a.price == price
     product_a.price = -110.0
-    assert product_a.price == 20.0
+    assert product_a.price == price
     captured = capsys.readouterr()
     result = NEGATIVE_ZERO_PRICE
     assert captured.out.strip() == result
+    price -= 10
+    with patch("builtins.input") as mock_input:
+        mock_input.return_value = "n"
+        product_a.price = price
+        captured = capsys.readouterr()
+        assert captured.out.strip()[:10] == "Новая цена"
+        assert product_a.price > price
+    with patch("builtins.input") as mock_input:
+        mock_input.return_value = "y"
+        product_a.price = price
+        captured = capsys.readouterr()
+        assert captured.out.strip()[:10] == "Новая цена"
+        assert product_a.price == price
+    with patch("builtins.input") as mock_input:
+        product_a.price += 10
+        mock_input.side_effect = ["w", "y"]
+        product_a.price = price
+        captured = capsys.readouterr()
+        assert captured.out.strip()[-22:] == "нет, оставляем старую."
+        assert product_a.price == price
 
 
 def test_category(category_a: Category, product_a: Product) -> None:

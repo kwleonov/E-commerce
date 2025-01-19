@@ -62,7 +62,23 @@ class Product:
         if price <= 0:
             print(NEGATIVE_ZERO_PRICE)
             return
-        self.__price = price
+        if price > self.__price:
+            self.__price = price
+            return
+        if price < self.__price:
+            print(f"Новая цена ({price}) ниже чем старая ({self.__price})")
+            while True:
+                user_answer = input("Нужно ли понизить цену? (y/n):")
+                user_answer = user_answer.lower()
+                print()
+                if user_answer == "y":
+                    self.__price = price
+                    return
+                if user_answer == "n":
+                    return
+                print("""Выберите нужный вариант нажав кнопу:
+                                'y' - да, цену понижаем
+                                'n' - нет, оставляем старую.""")
 
     @classmethod
     def new_product(cls, product_dict: Product_json) -> Self:
