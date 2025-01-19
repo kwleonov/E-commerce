@@ -22,4 +22,4 @@
 - *read_json* - the function reads a list of Categories from a json file
 - *CategoryIter* - the class for get a product from a category
   - methods:
-    - *get_product* - return an item from the category's products
+    - *get_product* - the generator returns an item from the category's products
