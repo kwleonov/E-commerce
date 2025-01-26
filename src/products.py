@@ -40,7 +40,7 @@ class BaseProduct(ABC):
     @classmethod
     @abstractmethod
     def new_product(cls, product_dict) -> Self:
-        ...
+        pass
 
 
 class MixinPrint:
@@ -54,7 +54,7 @@ class MixinPrint:
 
         type_of_product = type(self)
         attrs = self.__dict__
-        repr = [f"'{k}'='{v}'" for k, v in attrs.items()]
+        repr = [f"'{k}'='{v}'" for k, v in sorted(attrs.items())]
         return f"{type_of_product}({', '.join(repr)})"
 
     def __init__(self) -> None:
