@@ -59,3 +59,34 @@ def categories() -> list[Category]:
         Category(name="A", description="category A", products=products_a),
         Category(name="B", description="category B", products=products_b),
     ]
+
+
+@pytest.fixture
+def smartphone_dict():
+    """the fixture for testing the Smartphone class and adding with
+    the LawnGrass object"""
+    return {
+        "name": "the Brand's smartphone",
+        "description": "the smartphone from a famous brand",
+        "price": 111_111.99,
+        "quantity": 99,
+        "efficiency": 0.99,
+        "model": "the newest model",
+        "memory": 512,
+        "color": "gold"
+    }
+
+
+@pytest.fixture
+def lawngrass_dict():
+    """the fixture for testing the LawnGrass class and adding with
+    the Smartphone object"""
+    return {
+        "name": "the Brand's lawn grass",
+        "description": "the lawn grass from a famous Belgian brand",
+        "price": 111.99,
+        "quantity": 99,
+        "country": "Belgium",
+        "germination_period": "60 days",
+        "color": "dark green"
+    }
