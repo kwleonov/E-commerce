@@ -272,9 +272,9 @@ def test_print_repr(capsys: CaptureFixture[Any]) -> None:
                       11.11, 10)
     captured = capsys.readouterr()
     attrs = []
-    attrs.append(f"'_Product__price'='11.11'")
-    attrs.append(f"'description'='Description of the new product'")
-    attrs.append(f"'name'='New Product'")
-    attrs.append(f"'quantity'='10'")
+    attrs.append("'_Product__price'='11.11'")
+    attrs.append("'description'='Description of the new product'")
+    attrs.append("'name'='New Product'")
+    attrs.append("'quantity'='10'")
     result = f"{type(product)}({', '.join(attrs)})"
     assert captured.out.strip() == result
