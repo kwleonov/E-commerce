@@ -32,7 +32,10 @@ class Product:
             name - the name of the product
             description - the description of the product
             price - the cost of the product for sale
-            quantity - the quantity of the product in stock"""
+            quantity - the quantity of the product in stock
+        methods:
+            new_product - the classmethod creates the product
+            instance"""
 
     name: str = ""
     description: str = ""
@@ -99,6 +102,8 @@ class Product:
     def __add__(self, product: Self) -> float:
         """override the __add__ method to return
         the sum of multiplying the price by the quantity of each product"""
+        if not isinstance(product, type(self)):
+            raise TypeError
         result = self.__price * self.quantity
         result += product.price * product.quantity
         return result
@@ -144,6 +149,8 @@ class Category:
 
     def add_product(self, product: Product) -> None:
         """add the product to the __products list of the Category's instance"""
+        if not isinstance(product, Product):
+            raise TypeError
         if product.name in self.__product_names:
             index = self.__product_names[product.name]
             self.__products[index].quantity += product.quantity
@@ -217,3 +224,51 @@ class CategoryIter:
         """generator for the products of the category"""
         for product in self.__category:
             yield product
+
+
+class Smartphone(Product):
+    """class Smartphone
+        attributes:
+            name - the name of the product
+            description - the description of the product
+            price - the cost of the product for sale
+            quantity - the quantity of the product in stock
+            efficiency - the efficiency of the smartphone model
+            model - the name of the smartphone model
+            memory - the memory that is installed in the smartphone
+            color - the color of the smartphone
+        methods:
+            new_product - the classmethod creates the product
+            instance"""
+
+    def __init__(self, name, description, price, quantity,
+                 efficiency, model, memory, color) -> None:
+        """the constructor of the Smartphone class"""
+
+        super().__init__(name, description, price, quantity)
+        self.efficiency = efficiency
+        self.model = model
+        self.memory = memory
+        self.color = color
+
+
+class LawnGrass(Product):
+    """class Smartphone
+            attributes:
+                name - the name of the product
+                description - the description of the product
+                price - the cost of the product for sale
+                quantity - the quantity of the product in stock
+                country - the country where lawn grass is grown
+                germination_period - the germination period of the lawn grass
+                color - the color of the lawn grass
+            methods:
+                new_product - the classmethod creates the product
+                instance"""
+
+    def __init__(self, name, description, price, quantity,
+                 country, germination_period, color):
+        super().__init__(name, description, price, quantity)
+        self.country = country
+        self.germination_period = germination_period
+        self.color = color

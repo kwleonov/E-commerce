@@ -1,10 +1,11 @@
 from typing import Any
 from unittest.mock import patch
 
+import pytest
 from pytest import CaptureFixture
 
-from src.products import (NEGATIVE_ZERO_PRICE, Category, CategoryIter, Product,
-                          read_json)
+from src.products import (NEGATIVE_ZERO_PRICE, Category, CategoryIter,
+                          LawnGrass, Product, Smartphone, read_json)
 
 
 def test_product(product_a: Product) -> None:
@@ -212,3 +213,54 @@ def test_category_iter(category_a: Category, product_a: Product) -> None:
     category_iter = CategoryIter(category_a)
     for product in category_iter.get_product():
         assert product == product_a
+
+
+def test_smartphone(smartphone_dict) -> None:
+    """testing the Smartphone class"""
+
+    smartphone = Smartphone(**smartphone_dict)
+    assert smartphone.name == smartphone_dict["name"]
+    assert smartphone.description == smartphone_dict["description"]
+    assert smartphone.price == smartphone_dict["price"]
+    assert smartphone.quantity == smartphone_dict["quantity"]
+    assert smartphone.efficiency == smartphone_dict["efficiency"]
+    assert smartphone.model == smartphone_dict["model"]
+    assert smartphone.memory == smartphone_dict["memory"]
+    assert smartphone.color == smartphone_dict["color"]
+
+
+def test_lawngrass(lawngrass_dict) -> None:
+    """testing the LawnGrass class"""
+
+    lawngrass = LawnGrass(lawngrass_dict["name"],
+                          lawngrass_dict["description"],
+                          lawngrass_dict["price"],
+                          lawngrass_dict["quantity"],
+                          lawngrass_dict["country"],
+                          lawngrass_dict["germination_period"],
+                          lawngrass_dict["color"])
+    assert lawngrass.name == lawngrass_dict["name"]
+    assert lawngrass.description == lawngrass_dict["description"]
+    assert lawngrass.price == lawngrass_dict["price"]
+    assert lawngrass.quantity == lawngrass_dict["quantity"]
+    assert lawngrass.country == lawngrass_dict["country"]
+    assert lawngrass.germination_period == lawngrass_dict["germination_period"]
+    assert lawngrass.color == lawngrass_dict["color"]
+
+
+def test_add_different_product(smartphone_dict, lawngrass_dict) -> None:
+    """testing for raise a type error when adding the Smartphone and
+    the LawnGrass products"""
+
+    smartphone = Smartphone(**smartphone_dict)
+    lawngrass = LawnGrass(**lawngrass_dict)
+    with pytest.raises(TypeError):
+        _ = smartphone + lawngrass
+
+
+def test_add_no_product(category_a) -> None:
+    """testing for raise a type error when adding the no product to
+    the Category"""
+
+    with pytest.raises(TypeError):
+        category_a.add_product("something")

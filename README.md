@@ -23,3 +23,26 @@
 - *CategoryIter* - the class for get a product from a category
   - methods:
     - *get_product* - the generator returns an item from the category's products
+- *Smartphone* - class Smartphone
+  - attributes:
+    - *name* - the name of the product
+    - *description* - the description of the product
+    - *price* - the cost of the product for sale
+    - *quantity* - the quantity of the product in stock
+    - *efficiency* - the efficiency of the smartphone model
+    - *model* - the name of the smartphone model
+    - *memory* - the memory that is installed in the smartphone
+    - *color* - the color of the smartphone
+  - methods:
+    - *new_product* - create a new product from dictionary
+- *LawnGrass* - class LawnGrass
+  - attributes:
+      - *name* - the name of the product
+      - *description* - the description of the product
+      - *price* - the cost of the product for sale
+      - *quantity* - the quantity of the product in stock
+      - *country* - the country where lawn grass is grown
+      - *germination_period* - the germination period of the lawn grass
+      - *color* - the color of the lawn grass
+  - methods:
+    - new_product - create a new product from dictionary
