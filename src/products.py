@@ -288,11 +288,11 @@ class Smartphone(Product):
                  efficiency, model, memory, color) -> None:
         """the constructor of the Smartphone class"""
 
-        super().__init__(name, description, price, quantity)
         self.efficiency = efficiency
         self.model = model
         self.memory = memory
         self.color = color
+        super().__init__(name, description, price, quantity)
 
 
 class LawnGrass(Product):
@@ -311,7 +311,9 @@ class LawnGrass(Product):
 
     def __init__(self, name, description, price, quantity,
                  country, germination_period, color):
-        super().__init__(name, description, price, quantity)
+        """the constructor of the LawnGrass class"""
+
         self.country = country
         self.germination_period = germination_period
         self.color = color
+        super().__init__(name, description, price, quantity)
