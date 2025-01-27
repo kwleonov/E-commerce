@@ -264,3 +264,17 @@ def test_add_no_product(category_a) -> None:
 
     with pytest.raises(TypeError):
         category_a.add_product("something")
+
+
+def test_print_repr(capsys: CaptureFixture[Any]) -> None:
+    """testing print the Product repr to the console during init"""
+    product = Product("New Product", "Description of the new product",
+                      11.11, 10)
+    captured = capsys.readouterr()
+    attrs = []
+    attrs.append("'_Product__price'='11.11'")
+    attrs.append("'description'='Description of the new product'")
+    attrs.append("'name'='New Product'")
+    attrs.append("'quantity'='10'")
+    result = f"{type(product)}({', '.join(attrs)})"
+    assert captured.out.strip() == result

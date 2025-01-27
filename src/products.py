@@ -1,6 +1,7 @@
 import json
 import pathlib
 import sys
+from abc import ABC, abstractmethod
 from collections.abc import Generator
 from typing import ClassVar, TypedDict
 
@@ -26,7 +27,43 @@ Category_json = TypedDict("Category_json", {
 })
 
 
-class Product:
+class BaseProduct(ABC):
+    """the abstract class as base for the Product class"""
+
+    __slots__ = [
+        "name",
+        "descriptions",
+        "__price",
+        "quantity"
+    ]
+
+    @classmethod
+    @abstractmethod
+    def new_product(cls, product_dict) -> Self:
+        pass
+
+
+class MixinPrint:
+    """the mixin class
+    prints information about the object
+    to the console"""
+
+    def __repr__(self) -> str:
+        """override __repr__ for print info
+        to the console"""
+
+        type_of_product = type(self)
+        attrs = self.__dict__
+        repr = [f"'{k}'='{v}'" for k, v in sorted(attrs.items())]
+        return f"{type_of_product}({', '.join(repr)})"
+
+    def __init__(self) -> None:
+        """print repr to the console"""
+
+        print(f"{self!r}")
+
+
+class Product(BaseProduct, MixinPrint):
     """class Product
         attributes:
             name - the name of the product
@@ -54,6 +91,7 @@ class Product:
         self.__price = price
         self.quantity = quantity
         self.description = description
+        super().__init__()
 
     @property
     def price(self) -> float:
@@ -107,6 +145,11 @@ class Product:
         result = self.__price * self.quantity
         result += product.price * product.quantity
         return result
+
+    def __repr__(self) -> str:
+        "override __repr__ in the MixinPrint class"
+
+        return super().__repr__()
 
 
 class Category:
@@ -245,11 +288,11 @@ class Smartphone(Product):
                  efficiency, model, memory, color) -> None:
         """the constructor of the Smartphone class"""
 
-        super().__init__(name, description, price, quantity)
         self.efficiency = efficiency
         self.model = model
         self.memory = memory
         self.color = color
+        super().__init__(name, description, price, quantity)
 
 
 class LawnGrass(Product):
@@ -268,7 +311,9 @@ class LawnGrass(Product):
 
     def __init__(self, name, description, price, quantity,
                  country, germination_period, color):
-        super().__init__(name, description, price, quantity)
+        """the constructor of the LawnGrass class"""
+
         self.country = country
         self.germination_period = germination_period
         self.color = color
+        super().__init__(name, description, price, quantity)
