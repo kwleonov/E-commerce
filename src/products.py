@@ -11,6 +11,7 @@ else:
     from typing import Self
 
 NEGATIVE_ZERO_PRICE = "Цена не должна быть нулевая или отрицательная"
+VALUE_ERR_MSG = "Товар с нулевым количеством не может быть добавлен"
 
 Product_json = TypedDict("Product_json", {
     "name": str,
@@ -88,7 +89,7 @@ class Product(BaseProduct, MixinPrint):
         Init the name, description, price and quantity attributes"""
 
         if quantity <= 0:
-            raise ValueError(f"{quantity=} but it must be more than zero")
+            raise ValueError(VALUE_ERR_MSG)
         self.name = name
         self.__price = price
         self.quantity = quantity

@@ -4,8 +4,9 @@ from unittest.mock import patch
 import pytest
 from pytest import CaptureFixture
 
-from src.products import (NEGATIVE_ZERO_PRICE, Category, CategoryIter,
-                          LawnGrass, Product, Smartphone, read_json)
+from src.products import (NEGATIVE_ZERO_PRICE, VALUE_ERR_MSG, Category,
+                          CategoryIter, LawnGrass, Product, Smartphone,
+                          read_json)
 
 
 def test_product(product_a: Product) -> None:
@@ -283,9 +284,9 @@ def test_print_repr(capsys: CaptureFixture[Any]) -> None:
 def test_init_bad_product() -> None:
     """testing for creating the product with quantity equals zero"""
 
-    value_err_msg = "quantity=0 but it must be more than zero"
+    value_err_msg = VALUE_ERR_MSG
     with pytest.raises(ValueError, match=value_err_msg):
-        product = Product("A", "A", 10.0, 0)
+        _ = Product("A", "A", 10.0, 0)
 
 
 def test_middle_price(category_b: Category) -> None:
