@@ -278,3 +278,11 @@ def test_print_repr(capsys: CaptureFixture[Any]) -> None:
     attrs.append("'quantity'='10'")
     result = f"{type(product)}({', '.join(attrs)})"
     assert captured.out.strip() == result
+
+
+def test_init_bad_product() -> None:
+    """testing for creating the product with quantity equals zero"""
+
+    value_err_msg = "quantity=0 but it must be more than zero"
+    with pytest.raises(ValueError, match=value_err_msg):
+        product = Product("A", "A", 10.0, 0)

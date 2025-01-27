@@ -87,6 +87,8 @@ class Product(BaseProduct, MixinPrint):
         """constructor for the Product class.
         Init the name, description, price and quantity attributes"""
 
+        if quantity <= 0:
+            raise ValueError(f"{quantity=} but it must be more than zero")
         self.name = name
         self.__price = price
         self.quantity = quantity
