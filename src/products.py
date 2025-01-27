@@ -229,6 +229,18 @@ class Category:
         self.__current_index += 1
         return product
 
+    def middle_price(self) -> float:
+        """return the average price of products"""
+
+        average_price = 0.0
+        try:
+            quantity = sum([p.quantity for p in self.__products])
+            pr = sum([p.price * p.quantity for p in self.__products])
+            average_price = pr / quantity
+        except ZeroDivisionError:
+            return 0.0
+        return average_price
+
 
 def read_json(filename: str) -> list[Category]:
     """receives data from an Json file and returns

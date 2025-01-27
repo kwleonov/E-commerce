@@ -286,3 +286,18 @@ def test_init_bad_product() -> None:
     value_err_msg = "quantity=0 but it must be more than zero"
     with pytest.raises(ValueError, match=value_err_msg):
         product = Product("A", "A", 10.0, 0)
+
+
+def test_middle_price(category_b: Category) -> None:
+    """testing for calculating the average Category's products price"""
+
+    assert category_b.middle_price() == 11.0
+
+
+def test_middle_price_empty_category() -> None:
+    """testing for a ZeroDivisionError exception
+    when calculating the average price of the category with
+    an empty list of products"""
+
+    category = Category("A", "a", [])
+    assert category.middle_price() == 0.0
