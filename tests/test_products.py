@@ -284,8 +284,7 @@ def test_print_repr(capsys: CaptureFixture[Any]) -> None:
 def test_init_bad_product() -> None:
     """testing for creating the product with quantity equals zero"""
 
-    value_err_msg = VALUE_ERR_MSG
-    with pytest.raises(ValueError, match=value_err_msg):
+    with pytest.raises(ValueError, match=VALUE_ERR_MSG):
         _ = Product("A", "A", 10.0, 0)
 
 
