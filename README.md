@@ -1,6 +1,9 @@
 # E-commerce
 
 **products**
+- *BaseProduct* - the abstract class for products
+- *MixinPrint* - the base class for the Product class,
+prints information about the object to the console
 - *Product* - class Product
   - attributes:
     - *name* - the name of the product
