@@ -11,6 +11,7 @@ else:
     from typing import Self
 
 NEGATIVE_ZERO_PRICE = "Цена не должна быть нулевая или отрицательная"
+VALUE_ERR_MSG = "Товар с нулевым количеством не может быть добавлен"
 
 Product_json = TypedDict("Product_json", {
     "name": str,
@@ -87,6 +88,8 @@ class Product(BaseProduct, MixinPrint):
         """constructor for the Product class.
         Init the name, description, price and quantity attributes"""
 
+        if quantity <= 0:
+            raise ValueError(VALUE_ERR_MSG)
         self.name = name
         self.__price = price
         self.quantity = quantity
@@ -226,6 +229,18 @@ class Category:
         product = self.__products[self.__current_index]
         self.__current_index += 1
         return product
+
+    def middle_price(self) -> float:
+        """return the average price of products"""
+
+        average_price = 0.0
+        try:
+            quantity = sum([p.quantity for p in self.__products])
+            pr = sum([p.price * p.quantity for p in self.__products])
+            average_price = pr / quantity
+        except ZeroDivisionError:
+            return 0.0
+        return average_price
 
 
 def read_json(filename: str) -> list[Category]:
