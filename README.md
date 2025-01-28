@@ -22,10 +22,12 @@ prints information about the object to the console
     - *product_count* - the class attribute is count of products
   - methods:
     - *add_product* - add the product to list of Category's products
+    - *middle_price* - return the average price of Category's products
 - *read_json* - the function reads a list of Categories from a json file
 - *CategoryIter* - the class for get a product from a category
   - methods:
-    - *get_product* - the generator returns an item from the category's products
+    - *get_product* - the generator returns an item from 
+    the Category's products
 - *Smartphone* - class Smartphone
   - attributes:
     - *name* - the name of the product

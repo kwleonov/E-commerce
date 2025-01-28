@@ -34,6 +34,19 @@ def category_a(product_a: Product) -> Category:
     return category
 
 
+@pytest.fixture()
+def category_b() -> Category:
+    """the fixture for the test_middle_price"""
+
+    product_a = Product("A", "A", 11.0, quantity=3)
+    product_b = Product("A", "A", 20.0, quantity=6)
+    product_c = Product("A", "A", 5.0, quantity=9)
+    category = Category(name="B",
+                        description="category B",
+                        products=[product_a, product_b, product_c])
+    return category
+
+
 @pytest.fixture
 def categories() -> list[Category]:
     """the fixture of the list by Category

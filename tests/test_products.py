@@ -4,8 +4,9 @@ from unittest.mock import patch
 import pytest
 from pytest import CaptureFixture
 
-from src.products import (NEGATIVE_ZERO_PRICE, Category, CategoryIter,
-                          LawnGrass, Product, Smartphone, read_json)
+from src.products import (NEGATIVE_ZERO_PRICE, VALUE_ERR_MSG, Category,
+                          CategoryIter, LawnGrass, Product, Smartphone,
+                          read_json)
 
 
 def test_product(product_a: Product) -> None:
@@ -278,3 +279,25 @@ def test_print_repr(capsys: CaptureFixture[Any]) -> None:
     attrs.append("'quantity'='10'")
     result = f"{type(product)}({', '.join(attrs)})"
     assert captured.out.strip() == result
+
+
+def test_init_bad_product() -> None:
+    """testing for creating the product with quantity equals zero"""
+
+    with pytest.raises(ValueError, match=VALUE_ERR_MSG):
+        _ = Product("A", "A", 10.0, 0)
+
+
+def test_middle_price(category_b: Category) -> None:
+    """testing for calculating the average Category's products price"""
+
+    assert category_b.middle_price() == 11.0
+
+
+def test_middle_price_empty_category() -> None:
+    """testing for a ZeroDivisionError exception
+    when calculating the average price of the category with
+    an empty list of products"""
+
+    category = Category("A", "a", [])
+    assert category.middle_price() == 0.0
